@@ -123,14 +123,12 @@ Purchases and sales are immutable once created: there is no `edit`/`update` rout
 ```mermaid
 stateDiagram-v2
     direction LR
-    [*] --> pendiente: crear()
-    pendiente --> confirmed: confirmar() — stock moves here
-    confirmed --> anulada: anular() — inverse kardex movement
-    note right of confirmed
-        compras: completada
-        ventas: pagada
-    end note
+    [*] --> Pending: crear()
+    Pending --> Confirmed: confirmar()
+    Confirmed --> Voided: anular()
 ```
+
+Stored states: `pendiente` → `completada` (purchases) / `pagada` (sales) → `anulada`.
 
 - `crear()` stores the document and its items without touching stock.
 - `confirmar()` moves stock through `StockService` (one movement per item).
