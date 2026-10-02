@@ -1,0 +1,57 @@
+# ─── Billing & Inventory Management System ───────────────────────────────────
+# Levantar:  cp .env.example .env && docker compose up -d
+# Detener:   docker compose down
+# Logs:      docker compose logs -f app
+# Acceso:    http://localhost:8080  (configurable con APP_PORT)
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── Aplicación Laravel ──────────────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    # Corre con el UID del host para que vendor/, node_modules/ y storage/ no queden como root.
+    user: "${UID:-1000}:${GID:-1000}"
+    ports:
+      - "${APP_PORT:-8080}:8000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      APP_PORT: ${APP_PORT:-8080}
+    volumes:
+      # Código fuente montado: los cambios en PHP/Blade se ven sin reconstruir la imagen.
+      - .:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ── PostgreSQL 17 ───────────────────────────────────────────────────────────
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    ports:
+      # Host 5433 para no colisionar con un PostgreSQL local en 5432
+      - "127.0.0.1:${FORWARD_DB_PORT:-5433}:5432"
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-sistema_facturacion}
+      POSTGRES_USER: ${DB_USERNAME:-facturacion}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      # Crea la base 'testing' (usada por PHPUnit) en el primer arranque
+      - ./docker/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql:ro
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -q -d ${DB_DATABASE:-sistema_facturacion} -U ${DB_USERNAME:-facturacion}
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  db_data:

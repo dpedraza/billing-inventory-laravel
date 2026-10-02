@@ -1,0 +1,48 @@
+# ─── Git / IDE ────────────────────────────────────────────────────────────────
+.git
+.gitattributes
+.gitignore
+.github
+.idea
+.vscode
+.zed
+
+# ─── Dependencias (se instalan dentro del contenedor) ─────────────────────────
+/node_modules
+/.pnpm-store
+/vendor
+
+# ─── Assets compilados (se compilan en el contenedor o localmente) ─────────────
+/public/build
+/public/hot
+
+# ─── Variables de entorno sensibles ───────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ─── Logs y temporales ────────────────────────────────────────────────────────
+*.log
+/storage/logs
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+/storage/pail
+/bootstrap/cache
+
+# ─── Tests ────────────────────────────────────────────────────────────────────
+/tests
+phpunit.xml
+.phpunit.result.cache
+.phpunit.cache
+
+# ─── Documentación ────────────────────────────────────────────────────────────
+/docs
+README.md
+CHANGELOG.md
+AGENTS.md
+
+# ─── Misc ─────────────────────────────────────────────────────────────────────
+Homestead.*
+Thumbs.db
+.DS_Store
