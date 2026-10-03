@@ -24,7 +24,7 @@
                     </div>
                     <div x-show="sidebarOpen" class="flex flex-col transition-opacity duration-200">
                         <span class="font-semibold text-sm text-white tracking-tight leading-none">{{ config('app.name', 'FacturaPro') }}</span>
-                        <span class="text-[10px] font-mono text-teal-400 mt-1 uppercase tracking-widest">PyME ERP v2.4</span>
+                        <span class="text-[10px] font-mono text-teal-400 mt-1 uppercase tracking-widest">PyME ERP</span>
                     </div>
                 </a>
                 <button @click="sidebarOpen = !sidebarOpen" class="text-slate-400 hover:text-white p-1 rounded-md transition-colors hidden lg:block" title="Alternar menú">
