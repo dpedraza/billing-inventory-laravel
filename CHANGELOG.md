@@ -3,6 +3,16 @@
 All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project follows [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] — 2026-10-03
+
+### Added
+- Demo seeder guarantees activity in the current month (at least two sales per day, Sundays included, and a restock purchase to every supplier on day 1), so the dashboard period KPIs and rankings are never empty.
+- Application screenshots in the README (`docs/screenshots/`).
+
+### Fixed
+- Sales form: picking a product now prefills its sale price and enables the insufficient-stock warning (the handler was reading the customer/document-type selects instead of the product row).
+- Removed a hardcoded version ("v2.4") from the sidebar.
+
 ## [1.0.0] — 2026-10-02 — Initial public release
 
 ### Added

@@ -43,6 +43,7 @@ A server-rendered web application for small and medium Argentine businesses: pro
 - Printable purchase order (PDF).
 
 **Sales**
+- Dynamic item rows (Alpine.js): picking a product prefills its sale price (editable) and warns when the quantity exceeds the available stock.
 - Sequential numbering per document type (`FC-A-001`, `FC-B-001`, `REM-…`, `PRES-…`).
 - Lifecycle: pending → paid → voided. Confirming deducts stock and is rejected if stock is insufficient.
 - Printable sales document (PDF).
@@ -334,7 +335,7 @@ What each role can do (from the Policies in `app/Policies` and `ReporteControlle
 | Sales report (PDF / Excel) | ✅ | ✅ | — |
 | Purchases report (PDF / Excel) | ✅ | — | ✅ |
 
-The seeded data covers about five months of activity (all of it generated through the same services the UI uses): ~170 sales and ~25 purchases, including voided and pending documents, a stock adjustment from a physical count and several products below minimum stock. Details: [docs/05-seeders.md](docs/05-seeders.md).
+The seeded data covers about five months of activity (all of it generated through the same services the UI uses): ~175 sales and ~30 purchases, including voided and pending documents, a stock adjustment from a physical count and several products below minimum stock. The current month always has sales and a restock from every supplier, so the dashboard is never empty, even on the first day of a month. Details: [docs/05-seeders.md](docs/05-seeders.md).
 
 ---
 

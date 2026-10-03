@@ -109,7 +109,7 @@ resources/views/
 - Alpine.js con `x-data="compraForm()"`
 - Selector de proveedor
 - Tabla dinámica de productos con:
-  - Select de producto + precio costo precargado
+  - Select de producto + costo unitario (se ingresa manualmente)
   - Cantidad ajustable
   - Subtotal calculado automáticamente
 - Totales en vivo: Subtotal, IVA (21%), Total
@@ -118,7 +118,7 @@ resources/views/
 ### Ventas — Formulario (`ventas/form.blade.php`)
 - Misma estructura que compras pero orientado a venta
 - Selector de cliente + tipo de comprobante
-- Precio unitario editable
+- Al elegir el producto se precarga su precio de venta (editable) y se avisa si la cantidad supera el stock disponible
 - Cálculo de IVA 21% en vivo
 
 ### Inventario — Listado (`inventario/index.blade.php`)
