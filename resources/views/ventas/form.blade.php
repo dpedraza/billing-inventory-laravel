@@ -88,7 +88,7 @@
                                     <template x-for="(item, index) in items" :key="index">
                                         <tr>
                                             <td class="px-4 py-2">
-                                                <select x-model="item.producto_id" @change="selectProduct(index)" :name="'items['+index+'][producto_id]'" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                                <select x-model="item.producto_id" @change="selectProduct(index, $event.target)" :name="'items['+index+'][producto_id]'" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                                                     <option value="">Seleccione...</option>
                                                     @foreach($productos as $producto)
                                                         <option value="{{ $producto->id }}" data-stock="{{ $producto->stock_actual }}" data-precio="{{ $producto->precio_venta }}">{{ $producto->nombre }} ({{ $producto->sku }}) — Stock: {{ number_format($producto->stock_actual) }}</option>
@@ -190,9 +190,8 @@
                 this.items.splice(index, 1);
             },
 
-            selectProduct(index) {
+            selectProduct(index, select) {
                 const item = this.items[index];
-                const select = this.$el.querySelectorAll('select')[index];
                 const option = select ? select.options[select.selectedIndex] : null;
 
                 if (option && option.value) {
