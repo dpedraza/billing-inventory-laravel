@@ -109,7 +109,7 @@ resources/views/
 - Alpine.js con `x-data="compraForm()"`
 - Selector de proveedor
 - Tabla dinámica de productos con:
-  - Select de producto + costo unitario (se ingresa manualmente)
+  - Select de producto: precarga el costo unitario actual del producto (editable; al confirmar la compra actualiza el `precio_costo`)
   - Cantidad ajustable
   - Subtotal calculado automáticamente
 - Totales en vivo: Subtotal, IVA (21%), Total

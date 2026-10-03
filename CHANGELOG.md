@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Added
 - Demo seeder guarantees activity in the current month (at least two sales per day, Sundays included, and a restock purchase to every supplier on day 1), so the dashboard period KPIs and rankings are never empty.
 - Application screenshots in the README (`docs/screenshots/`).
+- Purchase form: picking a product prefills its current cost price (still editable).
 
 ### Fixed
 - Sales form: picking a product now prefills its sale price and enables the insufficient-stock warning (the handler was reading the customer/document-type selects instead of the product row).

@@ -38,7 +38,7 @@ A server-rendered web application for small and medium Argentine businesses: pro
 - CRUD with unique CUIT/DNI and VAT condition (Responsable Inscripto, Monotributista, Exento, Consumidor Final…).
 
 **Purchases**
-- Purchase orders with dynamic item rows (Alpine.js) and automatic 21 % VAT.
+- Purchase orders with dynamic item rows (Alpine.js): picking a product prefills its current cost (editable), with automatic 21 % VAT.
 - Lifecycle: pending → completed → voided. Confirming adds stock and updates the product cost price.
 - Printable purchase order (PDF).
 

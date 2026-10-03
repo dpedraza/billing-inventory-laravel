@@ -83,10 +83,10 @@
                                     <template x-for="(item, index) in items" :key="index">
                                         <tr>
                                             <td class="px-4 py-2">
-                                                <select x-model="item.producto_id" :name="'items['+index+'][producto_id]'" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                                <select x-model="item.producto_id" @change="selectProduct(index, $event.target)" :name="'items['+index+'][producto_id]'" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                                                     <option value="">Seleccione...</option>
                                                     @foreach($productos as $producto)
-                                                        <option value="{{ $producto->id }}" data-precio="{{ $producto->precio_costo }}">{{ $producto->nombre }} ({{ $producto->sku }})</option>
+                                                        <option value="{{ $producto->id }}" data-costo="{{ $producto->precio_costo }}">{{ $producto->nombre }} ({{ $producto->sku }})</option>
                                                     @endforeach
                                                 </select>
                                             </td>
@@ -177,6 +177,15 @@
 
             removeItem(index) {
                 this.items.splice(index, 1);
+            },
+
+            selectProduct(index, select) {
+                const option = select ? select.options[select.selectedIndex] : null;
+
+                if (option && option.value) {
+                    this.items[index].costo_unitario = parseFloat(option.dataset.costo) || 0;
+                    this.calcRow(index);
+                }
             },
 
             calcRow(index) {

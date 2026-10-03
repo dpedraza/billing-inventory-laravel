@@ -14,7 +14,7 @@ Sistema web monolítico para la gestión de facturación, control de stock y adm
 - **Dashboard adaptado por rol**: Admin (ventas, utilidad estimada, valor del inventario, rankings), Vendedor (ventas del día y pendientes), Deposito (stock crítico, compras por recibir, productos sin movimiento).
 - **Productos** con categorías, SKU único, precios y stock mínimo.
 - **Clientes y proveedores** con condición frente al IVA y CUIT/DNI único.
-- **Compras**: carga con ítems dinámicos (Alpine.js), IVA 21 %, ciclo pendiente → completada → anulada.
+- **Compras**: carga con ítems dinámicos (Alpine.js) que precargan el costo actual del producto (editable), IVA 21 %, ciclo pendiente → completada → anulada.
 - **Ventas**: ítems dinámicos que precargan el precio de venta del producto (editable) y avisan si la cantidad supera el stock; numeración correlativa por tipo de comprobante (`FC-A-001`, `FC-B-001`…), ciclo pendiente → pagada → anulada.
 - **Stock transaccional**: `DB::transaction` + `lockForUpdate()`, control de stock negativo configurable y kardex (`stock_movements`) con metadata JSONB. El stock cargado en el formulario de producto (inicial o conteo físico) se registra como ajuste en el kardex.
 - **Reportes**: PDF (DomPDF) de stock, ventas y compras por período, comprobante individual de venta y orden de compra; Excel (OpenSpout) de stock, ventas y compras por período.
