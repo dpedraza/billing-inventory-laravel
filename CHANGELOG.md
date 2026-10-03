@@ -14,6 +14,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Sales form: picking a product now prefills its sale price and enables the insufficient-stock warning (the handler was reading the customer/document-type selects instead of the product row).
 - Removed a hardcoded version ("v2.4") from the sidebar.
 
+### Changed
+- `docs/04-vistas.md` now matches the current UI: role-based dashboards, real sidebar groups, reports page with per-role cards, product stock recorded as kardex adjustments and the sales/purchase forms prefilling price/cost.
+
 ## [1.0.0] — 2026-10-02 — Initial public release
 
 ### Added

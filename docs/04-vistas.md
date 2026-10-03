@@ -1,7 +1,7 @@
 # Vistas Blade
 
 Stack frontend: **Blade + Tailwind CSS v4 + Alpine.js 3.x**  
-Compilación con Vite (28KB CSS + 92KB JS).
+Compilación con Vite (~38 KB CSS + ~92 KB JS).
 
 ---
 
@@ -93,10 +93,11 @@ resources/views/
 - Estilo minimalista con layout `guest`
 - Sin registro público: los usuarios se crean con los seeders
 
-### Dashboard (`dashboard/index.blade.php`)
-- 3 tarjetas de resumen (ventas del mes, productos más vendidos, inventario)
-- Gráfico simple de ventas por día (tabla de datos)
-- Salud del stock bajo
+### Dashboard (`dashboard/index.blade.php` + `dashboard/partials/*`)
+- Contenedor que incluye un panel distinto según el rol del usuario, con banner de alertas (compras pendientes, ventas borrador, stock crítico)
+- **Admin**: KPIs (ventas del período, ventas de hoy, utilidad estimada, valor del inventario), Top 5 clientes y proveedores del mes, ventas y compras pendientes, últimos movimientos del kardex
+- **Vendedor**: ventas de hoy, facturas pendientes de cobro/emisión y productos más vendidos
+- **Deposito**: productos en stock crítico (con acceso a generar compra), compras esperando ingreso, productos sin movimiento en 30 días y últimos movimientos de almacén
 
 ### Productos — Listado (`productos/index.blade.php`)
 - Tabla con columnas: SKU, Nombre, Categoría, Precio Venta, Stock Actual, Stock Mínimo, Estado, Acciones
@@ -127,23 +128,27 @@ resources/views/
 - Stock actual, stock mínimo, precio costo y precio venta
 - Enlaces a kardex individual de cada producto
 
+### Reportes (`reportes/index.blade.php`)
+- Tarjeta de stock actual: PDF y Excel (todos los roles)
+- Tarjetas de ventas y compras por período (desde/hasta, por defecto el mes en curso), cada una con PDF y Excel
+- Las tarjetas de ventas y compras se muestran solo con `@can('exportar', …)`: ventas para Admin/Vendedor, compras para Admin/Deposito (el controller también lo valida)
+
 ---
 
 ## Componentes compartidos
 
 ### Layout `layouts/app.blade.php`
-- Barra lateral (sidebar) con navegación agrupada por rol:
-  - **Dashboard**
-  - **Gestión**: Productos, Clientes, Proveedores
-  - **Movimientos**: Compras, Ventas
-  - **Inventario**: Stock general, Kardex, Stock bajo
-  - **Reportes**: Exportaciones PDF/Excel
-  - **Perfil**: Configuración de usuario
-- Menú responsive con Alpine.js (toggle en mobile)
-- Nombre de usuario actual + botón de logout
+- Barra lateral (sidebar) colapsable con navegación agrupada; cada ítem se muestra según la policy (`@can('viewAny', …)`):
+  - **Operaciones**: Dashboard, Ventas, Compras
+  - **Inventario & Catálogo**: Productos, Kardex Inventario
+  - **Gestión & Reportes**: Clientes, Proveedores, Reportes
+- Topbar con breadcrumb, badge del rol y botón "Nueva Venta" (solo si `@can('create', Venta::class)`)
+- Tarjeta del usuario actual (nombre + rol) con botón de logout
+- El perfil (`/perfil`) no tiene enlace en el menú
 
 ### `productos/form.blade.php`
 - Campos: SKU, Nombre, Categoría (select), Descripción, Unidad de Medida, Precio Costo, Precio Venta, Stock Mínimo, Stock Actual
+- El Stock Actual no se guarda directo: la diferencia con el stock vigente se registra en el kardex como ajuste (`ajuste_entrada` / `ajuste_salida`) vía `ProductoService`
 - Validación con errores de Laravel `@error`
 - Reutilizado por create y edit
 
