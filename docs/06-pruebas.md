@@ -9,7 +9,7 @@ Base: PostgreSQL real, base `testing` (configurada en `phpunit.xml`)
 
 ---
 
-## Tests implementados (32 tests)
+## Tests implementados (33 tests)
 
 ### `SistemaTest`
 
@@ -50,6 +50,7 @@ Ejecuta `DatabaseSeeder` completo y verifica la consistencia de los datos demo.
 | `test_demo_users_have_one_role_each` | Cada usuario demo tiene exactamente su rol y la contraseña `password` |
 | `test_stock_matches_kardex_for_every_product` | `stock_actual` = suma de `stock_movements` y nunca negativo |
 | `test_demo_data_covers_every_document_state` | Hay ventas y compras en todos los estados y productos bajo el mínimo |
+| `test_current_month_always_has_activity_for_the_dashboard` | El mes en curso tiene ventas pagadas (también hoy) y compras completadas de todos los proveedores |
 | `test_cuits_have_valid_check_digit` | CUIT/CUIL de clientes y proveedores con dígito verificador válido |
 | `test_seeder_is_idempotent` | Re-ejecutar el seeder no duplica registros |
 

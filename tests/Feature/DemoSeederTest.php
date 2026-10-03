@@ -67,6 +67,18 @@ class DemoSeederTest extends TestCase
         $this->assertTrue(Producto::whereColumn('stock_actual', '<=', 'stock_minimo')->exists());
     }
 
+    public function test_current_month_always_has_activity_for_the_dashboard(): void
+    {
+        $mes = [now()->startOfMonth()->toDateString(), now()->endOfMonth()->toDateString()];
+
+        $this->assertTrue(Venta::where('estado', 'pagada')->whereBetween('fecha_emision', $mes)->exists());
+        $this->assertTrue(Venta::where('estado', 'pagada')->whereDate('fecha_emision', now()->toDateString())->exists());
+        $this->assertSame(
+            Proveedor::count(),
+            Compra::where('estado', 'completada')->whereBetween('fecha_emision', $mes)->distinct()->count('proveedor_id'),
+        );
+    }
+
     public function test_cuits_have_valid_check_digit(): void
     {
         $cuits = Cliente::pluck('cuit_dni')->merge(Proveedor::pluck('cuit_dni'));

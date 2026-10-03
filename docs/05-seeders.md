@@ -68,6 +68,7 @@ Simula ~150 días de actividad hasta la fecha actual. **Todas** las operaciones 
 - Ventas en días hábiles a clientes ponderados por frecuencia (Factura A a Responsables Inscriptos, Factura B al resto).
 - Una compra anulada (lote devuelto al proveedor) y dos ventas anuladas: la anulación genera el movimiento inverso en el kardex.
 - Pendientes del día: una venta, un presupuesto y dos compras sin confirmar.
+- Mes en curso: al menos 2 ventas por día (incluidos domingos) y una reposición a cada proveedor el día 1, así el dashboard del período tiene datos aunque el mes recién empiece.
 - Un conteo físico de depósito detecta 3 bidones de lavandina rotos y corrige el stock con un `ajuste_salida` vía `StockService::ajustarStock()`.
 - Una venta mayorista 3 días antes de hoy deja cuatro productos por debajo del stock mínimo (alertas del dashboard), que luego no se venden ni se reponen; así el resultado no depende de la fecha de ejecución. La amoladora no registra movimientos en los últimos 30 días.
 

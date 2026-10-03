@@ -42,6 +42,8 @@ class OperacionesDemoSeeder extends Seeder
     private const DIA_VENTA_MAYORISTA = self::DIAS_HISTORIA - 3;
     private const DIA_CONTEO_FISICO = 90;
     private const INFLACION_MENSUAL_COSTOS = 0.015;
+    /** Ventas mínimas por día en el mes en curso, para que el dashboard del mes nunca quede vacío. */
+    private const VENTAS_MINIMAS_MES_EN_CURSO = 2;
 
     /**
      * sku => [peso de rotación (0 = no se vende), último día en que se repone].
@@ -155,7 +157,15 @@ class OperacionesDemoSeeder extends Seeder
                         $this->ventaMayorista($fecha);
                     }
 
-                    if (! $fecha->isSunday()) {
+                    $enMesActual = $fecha->isSameMonth($this->ahora);
+
+                    if ($enMesActual && $fecha->day === 1) {
+                        $this->reposicionInicioDeMes($fecha);
+                    }
+
+                    // En el mes en curso también hay ventas los domingos, así el
+                    // dashboard tiene datos aunque el mes recién empiece.
+                    if (! $fecha->isSunday() || $enMesActual) {
                         $this->ventasDelDia($fecha, $dia);
                     }
                 }
@@ -246,6 +256,34 @@ class OperacionesDemoSeeder extends Seeder
     }
 
     /**
+     * Compra a cada proveedor el primer día del mes en curso, para que el ranking
+     * de proveedores del dashboard tenga datos. Excluye los productos que se
+     * mantienen por debajo del mínimo tras la venta mayorista.
+     */
+    private function reposicionInicioDeMes(Carbon $fecha): void
+    {
+        $minutos = 15;
+
+        foreach (self::PROVEEDOR_POR_RUBRO as $rubro => $cuit) {
+            $items = [];
+            foreach ($this->skusDelRubro($rubro) as $sku) {
+                [$peso] = self::ROTACION[$sku];
+                $congelado = $this->diaActual >= self::DIA_VENTA_MAYORISTA
+                    && isset(self::STOCK_FINAL_BAJO_MINIMO[$sku]);
+
+                if ($peso >= 3 && ! $congelado) {
+                    $items[$sku] = (float) $this->productos[$sku]->stock_minimo * 2;
+                }
+            }
+
+            if ($items !== []) {
+                $this->registrarCompra($cuit, $items, $fecha, $minutos, 'Reposición de inicio de mes.');
+                $minutos += 5;
+            }
+        }
+    }
+
+    /**
      * @param array<string, float> $items sku => cantidad
      */
     private function registrarCompra(
@@ -309,6 +347,10 @@ class OperacionesDemoSeeder extends Seeder
 
         if ($fecha->isSaturday()) {
             $cantidadVentas = intdiv($cantidadVentas, 2);
+        }
+
+        if ($fecha->isSameMonth($this->ahora)) {
+            $cantidadVentas = max($cantidadVentas, self::VENTAS_MINIMAS_MES_EN_CURSO);
         }
 
         for ($i = 0; $i < $cantidadVentas; $i++) {
